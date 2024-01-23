@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-cache-path
+        name="pictures_ext"
+        path="StreamImages/"/>
+    <cache-path
+        name="pictures_int"
+        path="StreamImages/"/>
+</paths>
