@@ -20,7 +20,7 @@ interface ServiceApi {
         @Query("sort_by") sortBy:String?,
     ) : Response<DiscoverResponse?>
 
-    @GET("3/discover/tv/{tvId}")
+    @GET("3/tv/{tvId}")
     suspend fun getTvDetail(
         @Path("tvId") tvId:String?,
         @Query("language") language:String?,

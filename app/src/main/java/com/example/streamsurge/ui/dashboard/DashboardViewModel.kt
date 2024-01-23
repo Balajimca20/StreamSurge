@@ -1,6 +1,7 @@
 package com.example.streamsurge.ui.dashboard
 
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -82,6 +83,7 @@ class DashboardViewModel(
     }
 
     fun getTvShowItems() {
+        Log.e("getTvShowItems","msg")
         viewModelScope.launch {
             if (currentPage <= totalPages) {
                 viewModelState.update { it.copy(isPaginating = !viewModelState.value.isLoading) }
