@@ -22,10 +22,7 @@ class TvSeriesDetailViewModel(
     private val repository: StreamRepository,
 ) : ViewModel() {
 
-    var searchValue by mutableStateOf("")
-        private set
     private var tvId = ""
-
     private val viewModelState = MutableStateFlow(TvSeriesDetailViewModelState(isLoading = true))
     val uiState = viewModelState
         .map { it.toUiState() }
@@ -33,7 +30,6 @@ class TvSeriesDetailViewModel(
 
     fun getIntent(intent: Intent?) {
         tvId = intent?.getStringExtra(Constants.KEY_IS_TV_ID).toString()
-        Log.e("tv", "msg: $tvId")
         getTvShowDetails()
     }
 

@@ -1,10 +1,12 @@
 package com.example.streamsurge.model
 
+import androidx.compose.runtime.Immutable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Immutable
 @Entity(tableName = "TvSeriesDetails")
 data class TvSeriesResponse(
     @PrimaryKey(autoGenerate = false)
@@ -14,7 +16,7 @@ data class TvSeriesResponse(
     val adult: Boolean? = false,
     @ColumnInfo(name = "backdrop_path")
     @SerializedName("backdrop_path")
-    val backdropPath: String?? = null,
+    val backdropPath: String? = null,
     @ColumnInfo(name = "created_by")
     @SerializedName("created_by")
     val createdBy: List<CreatedBy>? = null,

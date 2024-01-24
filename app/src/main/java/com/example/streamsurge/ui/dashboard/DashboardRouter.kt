@@ -30,6 +30,8 @@ fun DashboardRouter(
             intent.putExtras(bundle)
             context.startActivity(intent)
         },
-        tvShowItems=uiState.tvShowItem
+        tvShowItems=uiState.tvShowItem,
+        onRefreshing = { viewModel.onRefreshing(it) },
+        isRefreshing = viewModel.isRefreshing,
     )
 }

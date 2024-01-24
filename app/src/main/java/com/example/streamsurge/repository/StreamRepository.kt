@@ -34,7 +34,7 @@ class StreamRepository(
                 page = response?.page ?: 0,
                 totalPages = response?.totalPages ?: 0,
                 totalResults = response?.totalResults ?: 0,
-                tvShowItem = response?.tvShowItem ?: mutableListOf(),
+                tvShowItem = response?.tvShowItem ?: arrayListOf(),
             )
         )
 

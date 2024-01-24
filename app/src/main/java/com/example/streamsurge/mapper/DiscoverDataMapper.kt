@@ -49,11 +49,13 @@ suspend fun discoverDataMapper(
             val missingData = remoteData?.filterNot { remoteItem ->
                 localData?.tvShowItem?.any { localItem -> localItem.id == remoteItem.id } == true
             }
-            if (missingData?.isNotEmpty() == true) {
-                response.data.tvShowItem = missingData
-                localDataSource.insertData(response.data)
+            val data=localData?.tvShowItem as ArrayList
+            if(missingData.isNullOrEmpty()) {
+                missingData?.let { data.addAll(it) }
+                response.data?.tvShowItem =  data
+                response.data?.let { localDataSource.insertData(it) }
             }
-            return localDataSource.getAllData()
+            return response.data
         }
     }
 }

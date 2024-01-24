@@ -27,6 +27,8 @@ class DashboardViewModel(
     private var totalPages: Int = 1
     var searchValue by mutableStateOf("")
         private set
+    var isRefreshing by mutableStateOf(false)
+        private set
 
     private val viewModelState = MutableStateFlow(DashboardViewModelState(isLoading = true))
     val uiState = viewModelState
@@ -50,23 +52,26 @@ class DashboardViewModel(
         onSuccess = { items, newKey ->
             currentPage = newKey
             totalPages = items.totalPages
-            cacheTvShowItem = items.tvShowItem?.map { showItem ->
-                TvShowItem(
-                    id = showItem.id,
-                    backdropPath = showItem.backdropPath ?: "",
-                    firstAirDate = showItem.firstAirDate,
-                    genreIds = showItem.genreIds,
-                    name = showItem.name,
-                    originCountry = showItem.originCountry,
-                    originalLanguage = showItem.originalLanguage,
-                    originalName = showItem.originalName,
-                    overview = showItem.overview,
-                    popularity = showItem.popularity,
-                    posterPath = showItem.posterPath,
-                    voteAverage = showItem.voteAverage,
-                    voteCount = showItem.voteCount,
+            items.tvShowItem?.map { showItem ->
+                cacheTvShowItem.add(
+                    TvShowItem(
+                        id = showItem.id,
+                        backdropPath = showItem.backdropPath ?: "",
+                        firstAirDate = showItem.firstAirDate,
+                        genreIds = showItem.genreIds,
+                        name = showItem.name,
+                        originCountry = showItem.originCountry,
+                        originalLanguage = showItem.originalLanguage,
+                        originalName = showItem.originalName,
+                        overview = showItem.overview,
+                        popularity = showItem.popularity,
+                        posterPath = showItem.posterPath,
+                        voteAverage = showItem.voteAverage,
+                        voteCount = showItem.voteCount,
+                    )
                 )
-            } as MutableList<TvShowItem>
+            }
+            cacheTvShowItem.toSet()
             viewModelState.update {
                 it.copy(
                     lastUpdate = System.currentTimeMillis(),
@@ -83,7 +88,6 @@ class DashboardViewModel(
     }
 
     fun getTvShowItems() {
-        Log.e("getTvShowItems","msg")
         viewModelScope.launch {
             if (currentPage <= totalPages) {
                 viewModelState.update { it.copy(isPaginating = !viewModelState.value.isLoading) }
@@ -92,13 +96,21 @@ class DashboardViewModel(
         }
     }
 
-    private fun onResetAnnouncements() {
-        currentPage = 1
-        totalPages = 1
-        cacheTvShowItem.clear()
-        pagination.reset()
-        getTvShowItems()
+
+    fun onRefreshing(refreshingState: Boolean) {
+        isRefreshing = refreshingState
+        if (isRefreshing) {
+            viewModelState.update {
+                it.copy(isLoading = isRefreshing)
+            }
+            currentPage = 1
+            totalPages = 1
+            cacheTvShowItem.clear()
+            pagination.reset()
+            getTvShowItems()
+        }
     }
+
 
     fun searchList(query: String) {
         searchValue = query

@@ -1,4 +1,4 @@
-package com.example.streamsurge
+package com.example.streamsurge.ui.dashboard
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import com.example.streamsurge.ui.dashboard.DashboardViewModel
 import com.example.streamsurge.ui.theme.StreamSurgeTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : ComponentActivity() {
+class DashboardActivity : ComponentActivity() {
 
     private val viewModel: DashboardViewModel by viewModel()
 

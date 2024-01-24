@@ -7,4 +7,12 @@
     <string name="search">Search</string>
     <string name="no_data_found">No Data Found</string>
     <string name="title_activity_tv_details">TvDetailsActivity</string>
+    <string name="overview">Overview</string>
+    <string name="series_cast">Series Cast</string>
+    <string name="genre">Genre</string>
+    <string name="release_date">Release Date</string>
+    <string name="sessions">Sessions</string>
+    <string name="network">Network</string>
+    <string name="episode_with_count">%s Episodes</string>
+    <string name="episode">Episodes</string>
 </resources>

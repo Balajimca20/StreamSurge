@@ -1,24 +1,25 @@
 package com.example.streamsurge.ui.dashboard
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -40,17 +41,19 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.streamsurge.R
-import com.example.streamsurge.extensions.toJson
 import com.example.streamsurge.model.TvShowItem
 import com.example.streamsurge.utils.Constants
+import com.example.streamsurge.utils.getDateWithMonth
 
 
 @Preview(showBackground = true)
@@ -64,7 +67,9 @@ fun DashboardScreenPreview() {
         onSearchValueChanged = {},
         getTvShowItems = {},
         goToDetailActivity = {},
-        tvShowItems = arrayListOf()
+        tvShowItems = arrayListOf(),
+        onRefreshing = {},
+        isRefreshing = false,
     )
 }
 
@@ -79,10 +84,12 @@ fun DashboardScreen(
     onSearchValueChanged: (String) -> Unit,
     goToDetailActivity: (TvShowItem) -> Unit,
     tvShowItems: List<TvShowItem>,
+    onRefreshing: (Boolean) -> Unit,
+    isRefreshing: Boolean,
 ) {
 
     var clearDialog by remember { mutableStateOf(false) }
-    val listState = rememberLazyGridState()
+    val listState = rememberLazyListState()
     val layoutInfo = remember { derivedStateOf { listState.layoutInfo } }
     val isNeedPaginate =
         remember {
@@ -123,11 +130,12 @@ fun DashboardScreen(
                 } else if (tvShowItems.isEmpty()) {
                     EmptyScreen()
                 } else
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(minSize = 128.dp),
+                    LazyColumn(
+                        modifier = Modifier.simpleVerticalScrollbar(listState),
                         state = listState,
                         content = {
-                            items(tvShowItems) { data ->
+                            items(tvShowItems,
+                                key = {it.id?:""}) { data ->
                                 SeriesItem(
                                     data,
                                     onclickItem = {
@@ -192,10 +200,34 @@ fun SeriesItem(
 
 @Composable
 fun TvSeriesContent(showItem: TvShowItem) {
-    AsyncImage(
-        model = "${Constants.BASE_IMAGE_URL}${showItem.posterPath}",
-        contentDescription = "backdrop_path"
-    )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        AsyncImage(
+            model = "${Constants.BASE_IMAGE_URL}${showItem.posterPath}",
+            contentDescription = "backdrop_path",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .height(96.dp)
+                .width(96.dp),
+        )
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(6.dp)
+        ) {
+            Text(
+                text = showItem.name ?: "",
+                color = Color.Black,
+                fontWeight = FontWeight.Medium
+            )
+            Text(
+                text = getDateWithMonth(showItem.firstAirDate),
+                color = Color.Black,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+
 }
 
 @Composable

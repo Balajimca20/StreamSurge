@@ -1,12 +1,14 @@
 package com.example.streamsurge.model
 
 import androidx.annotation.Keep
+import androidx.compose.runtime.Immutable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Keep
+@Immutable
 @Entity(tableName = "Discover")
 data class DiscoverResponse(
     @PrimaryKey(autoGenerate = true)

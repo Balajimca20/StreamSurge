@@ -112,7 +112,7 @@ fun TopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Red
+            containerColor = colorResource(id = R.color.black_light)
         )
     )
 }

@@ -15,7 +15,7 @@ class TvSeriesDetailsActivity : ComponentActivity() {
         viewModel.getIntent(intent)
         setContent {
             StreamSurgeTheme {
-                TvSeriesDetailRouter(viewModel = viewModel)
+                TvSeriesDetailRouter(viewModel = viewModel,this@TvSeriesDetailsActivity)
             }
         }
     }
