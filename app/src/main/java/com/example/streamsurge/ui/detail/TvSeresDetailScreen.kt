@@ -32,11 +32,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.streamsurge.R
 import com.example.streamsurge.model.TvSeriesResponse
+import com.example.streamsurge.ui.dashboard.EmptyScreen
 import com.example.streamsurge.utils.Constants
 import com.example.streamsurge.utils.getDateWithMonth
 
@@ -69,14 +70,11 @@ fun TvSeriesDetailScreen(
     onBackPress: () -> Unit,
     tvSeriesDetailItem: TvSeriesResponse?,
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(id = R.string.app_name))
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -85,12 +83,20 @@ fun TvSeriesDetailScreen(
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
+                            tint = Color.White,
                         )
                     }
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                colors =TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                )
+
             )
         },
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -112,6 +118,8 @@ fun TvSeriesDetailScreen(
                             color = Color.Red
                         )
                     }
+                } else if (tvSeriesDetailItem == null) {
+                    EmptyScreen()
                 } else {
                     TvSeriesDetailItem(tvSeriesDetailItem)
                 }
@@ -127,7 +135,6 @@ fun TvSeriesDetailScreen(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TvSeriesDetailItem(tvSeriesDetailItem: TvSeriesResponse?) {
-    Spacer(modifier = Modifier.padding(4.dp))
     tvSeriesDetailItem?.seasons?.let { networks ->
         LazyColumn(content = {
             item {

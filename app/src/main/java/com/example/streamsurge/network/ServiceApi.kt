@@ -11,7 +11,7 @@ import retrofit2.http.Query
 
 interface ServiceApi {
 
-    @GET("3/discover/tv")
+    @GET("3/tv/popular")
     suspend fun getDiscover(
         @Query("include_adult") adult:Boolean?,
         @Query("include_null_first_air_dates") airDates:Boolean?,
